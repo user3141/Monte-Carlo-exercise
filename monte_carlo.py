@@ -16,7 +16,7 @@ def move_particle(density):
   # no periodic boundary conditions
   if pos == 0:
     direction = 1
-  elif pos == len(density):
+  elif pos == len(density) - 1:
     direction = -1
     
   # move particle
@@ -33,7 +33,7 @@ def accept_higher_energy(E_0, E_1, temp):
   return random.random() < boltzmann_factor
 
   
-def monte_carlo_sim(density, energy_fun, temp, steps=100):
+def monte_carlo_sim(density, energy_fun, temp=300, steps=100):
   """Monte Carlo (Metropolis-Hastings-algorithm) simulation of 1D diffusion.
      density - 1D particle density
      energy_fun - function to calculate energy
@@ -55,6 +55,15 @@ def monte_carlo_sim(density, energy_fun, temp, steps=100):
       
   
 if __name__ == "__main__"  :
-  pass
+  import matplotlib
+  import matplotlib.pyplot as plt
+  matplotlib.interactive(True)
+  
+  density = [1,2,3,4,5,6,7,8,9,10]
+  #random.shuffle(density)
+  energies, densities = monte_carlo_sim(density, dm.energy, steps=10000)
+  plt.plot(energies)
+  print densities[-10:-1]
+  plt.savefig('monte_carlo.png')
       
   
