@@ -1,9 +1,29 @@
 import diffusion_model as dm
+import random
 
 def move_particle(density):
   """Moves random particle randomly to the left or right."""
-  pass
-  return density
+  # random position with particle(s)
+  while True:
+    pos = random.randint(0, len(density)-1)
+    if density[pos] != 0:
+      break
+      
+  # random direction (-1 - left, 1 - right)
+  direction = random.choice([-1,1])
+  
+  # no periodic boundary conditions
+  if pos == 0:
+    direction = 1
+  elif pos == len(density):
+    direction = -1
+    
+  # move particle
+  new_density = density
+  new_density[pos] -= 1
+  new_density[pos + direction] += 1
+  
+  return new_density
 
 
 def accept_higher_energy(E_0, E_1, temp):
