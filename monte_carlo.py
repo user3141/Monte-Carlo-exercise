@@ -29,7 +29,7 @@ def move_particle(density):
       continue
       
     # move particle
-    new_density = density
+    new_density = list(density)
     new_density[pos] -= 1
     new_density[pos + direction] += 1
     break
@@ -69,12 +69,18 @@ if __name__ == "__main__"  :
   import matplotlib.pyplot as plt
   matplotlib.interactive(True)
   
-  density = [5] *50
+  density = [0] * 8 + [10] * 6 + [0] * 8
   #random.shuffle(density)
   temp = 300
-  energies, densities = monte_carlo_sim(density, dm.energy, temp, steps=10000)
+  energies, densities = monte_carlo_sim(density, dm.energy, temp, steps=5000)
   plt.plot(energies)
   print densities[-10:-1]
   plt.savefig('monte_carlo.png')
+  
+  densities = np.array(densities)
+  plt.clf()
+  heatmap = plt.pcolor(densities)
+  plt.savefig('heatmap.png')
+  
       
   
