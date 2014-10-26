@@ -25,9 +25,23 @@ def test_accept_higher_energy(mock_random):
 
 @mock.patch('monte_carlo.move_particle')
 @mock.patch('monte_carlo.accept_higher_energy')
-def test_monte_carlo_sim(mock_move_particle, mock_accept_higher_energy):
-  pass
+def test_monte_carlo_sim(mock_accept_higher_energy, mock_move_particle):
+
+  density = [0,0,1,0]
+  mock_move_particle.return_value = [0,1,0,0]
+  temp=300
+
+  # equal energy is accepted
+  mock_accept_higher_energy.return_value = True
+  energies, densities = monte_carlo.monte_carlo_sim(density, sum, temp, steps=1)
+  assert_equal(energies, [1,1])
+  assert_equal(densities, [[0, 0, 1, 0], [0, 1, 0, 0]])
   
+  # equal energy is not accepted
+  mock_accept_higher_energy.return_value = False
+  energies, densities = monte_carlo.monte_carlo_sim(density, sum, temp, steps=1)
+  assert_equal(energies, [1])
+  assert_equal(densities, [[0, 0, 1, 0]])
 
 if __name__ == "__main__":
-  test_accept_higher_energy()
+  test_monte_carlo_sim()

@@ -41,6 +41,7 @@ def monte_carlo_sim(density, energy_fun, temp, steps=100):
      steps - number of iterations
   """
   energies = [energy_fun(density)]
+  densities = [density]
   
   for i in xrange(steps):
     E_0 = energy_fun(density)
@@ -49,6 +50,8 @@ def monte_carlo_sim(density, energy_fun, temp, steps=100):
     if E_1 < E_0 or accept_higher_energy(E_0, E_1, temp):
       density = new_density
       energies.append(E_1)
+      densities.append(density)
+  return energies, densities
       
   
 if __name__ == "__main__"  :
