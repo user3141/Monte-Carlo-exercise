@@ -1,12 +1,12 @@
 import monte_carlo
-from nose.tools import assert_equal, assert_raises, assert_true, assert_false
+from nose.tools import assert_equal, assert_raises, assert_true, assert_false, assert_not_equal
 import mock
 import numpy as np
 
 def test_move_particle():
   density = np.array([0,0,0,1,0,0])
   new_density = monte_carlo.move_particle(density)
-  np.testing.assert_allclose(density, new_density)
+  assert_false((density == new_density).all())
   assert_equal(np.sum(density), np.sum(new_density))
   assert_false(np.any(density < 0))
   
@@ -42,6 +42,15 @@ def test_monte_carlo_sim(mock_accept_higher_energy, mock_move_particle):
   energies, densities = monte_carlo.monte_carlo_sim(density, sum, temp, steps=1)
   assert_equal(energies, [1])
   assert_equal(densities, [[0, 0, 1, 0]])
+
+  
+  def test_monte_carlo_sim2():
+    """Includes dependencies to other functions"""
+    density = [0,0,1,0]
+    temp = 300
+    energies, densities = monte_carlo.monte_carlo_sim(density, sum, temp, steps=2)
+    assert_not_equal(densities[0], densities[1])
+    assert_not_equal(energies[0], energies[1])
 
 if __name__ == "__main__":
   test_monte_carlo_sim()
