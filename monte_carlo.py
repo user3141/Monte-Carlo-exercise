@@ -1,5 +1,6 @@
 import diffusion_model as dm
 import random
+import math
 
 def move_particle(density):
   """Moves random particle randomly to the left or right."""
@@ -27,13 +28,13 @@ def move_particle(density):
 
 
 def accept_higher_energy(E_0, E_1, temp):
-  """If random number [0,1] is smaller than Boltzmann factor accept new state."""
-  pass
-  return
+  """If random number [0,1) is smaller than Boltzmann factor accept new state."""
+  boltzmann_factor = math.exp(- (E_1 - E_0)/temp)
+  return random.random() < boltzmann_factor
 
   
 def monte_carlo_sim(density, energy_fun, temp, steps=100):
-  """Monte Carlo (Metropolisalgorithm) simulation of 1D diffusion.
+  """Monte Carlo (Metropolis-Hastings-algorithm) simulation of 1D diffusion.
      density - 1D particle density
      energy_fun - function to calculate energy
      temp - simulation temperature

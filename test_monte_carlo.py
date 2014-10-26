@@ -15,9 +15,12 @@ def test_move_particle():
   np.testing.assert_allclose(new_density, np.array([0,1,0,0,0,0]))
 
   
-
-def test_accept_higher_energy():
-  pass
+@mock.patch('monte_carlo.random.random')
+def test_accept_higher_energy(mock_random):
+  mock_random.return_value = 0.35
+  assert_true(monte_carlo.accept_higher_energy(E_0=10, E_1=18, temp=300))
+  mock_random.return_value = 0.37
+  assert_false(monte_carlo.accept_higher_energy(E_0=10, E_1=18, temp=300))
   
 
 @mock.patch('monte_carlo.move_particle')
@@ -25,3 +28,6 @@ def test_accept_higher_energy():
 def test_monte_carlo_sim(mock_move_particle, mock_accept_higher_energy):
   pass
   
+
+if __name__ == "__main__":
+  test_accept_higher_energy()
